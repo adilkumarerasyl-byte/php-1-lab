@@ -1,3 +1,46 @@
+<?php
+  $cols  = 5;
+  $rows  = 5;
+  $color = '#dddddd';
+
+  if (isset($_GET['cols'], $_GET['rows'], $_GET['color'])) {
+      $inputCols  = (int) $_GET['cols'];
+      $inputRows  = (int) $_GET['rows'];
+      $inputColor = trim($_GET['color']);
+
+      if ($inputCols >= 1 && $inputCols <= 10) {
+          $cols = $inputCols;
+      }
+      if ($inputRows >= 1 && $inputRows <= 10) {
+          $rows = $inputRows;
+      }
+
+      if (preg_match('/^#[0-9a-fA-F]{3}([0-9a-fA-F]{3})?$/', $inputColor) ||
+          preg_match('/^[a-zA-Z]{3,20}$/', $inputColor)) {
+          $color = $inputColor;
+      }
+  }
+
+  function drawTable($cols, $rows, $color) {
+      echo "<table border='1' width='200'>";
+      for ($r = 1; $r <= $rows; $r++) {
+          echo "<tr>";
+          for ($c = 1; $c <= $cols; $c++) {
+              $value = $r * $c;
+              if ($r === 1 || $c === 1) {
+                  echo "<td style='font-weight: bold; text-align: center; background-color: $color;'>$value</td>";
+              } else {
+                  echo "<td>$value</td>";
+              }
+          }
+          echo "</tr>";
+      }
+      echo "</table>";
+  }
+
+  // Современное получение года без устаревшей функции strftime()
+  $year = date('Y');
+?>
 <!DOCTYPE html>
 <html>
 
@@ -10,96 +53,45 @@
 <body>
 
   <div id="header">
-    <!-- Верхняя часть страницы -->
     <img src="logo.gif" width="187" height="29" alt="Наш логотип" class="logo" />
     <span class="slogan">приходите к нам учиться</span>
-    <!-- Верхняя часть страницы -->
-  </div>
+    </div>
 
   <div id="content">
-    <!-- Заголовок -->
     <h1>Таблица умножения</h1>
-    <!-- Заголовок -->
-    <!-- Область основного контента -->
-    <form action=''>
+    <form action='' method='get'>
       <label>Количество колонок: </label>
       <br />
-      <input name='cols' type='text' value="" />
+      <input name='cols' type='text' value="<?= htmlspecialchars((string)$cols) ?>" />
       <br />
       <label>Количество строк: </label>
       <br />
-      <input name='rows' type='text' value="" />
+      <input name='rows' type='text' value="<?= htmlspecialchars((string)$rows) ?>" />
       <br />
       <label>Цвет: </label>
       <br />
-      <input name='color' type='text' value="" />
+      <input name='color' type='text' value="<?= htmlspecialchars((string)$color) ?>" />
       <br />
       <br />
       <input type='submit' value='Создать' />
     </form>
-    <!-- Таблица -->
-    <table border='1' width="200">
-      <tr>
-        <td>1</td>
-        <td>2</td>
-        <td>3</td>
-        <td>4</td>
-        <td>5</td>
-      </tr>
-      <tr>
-        <td>2</td>
-        <td>4</td>
-        <td>6</td>
-        <td>8</td>
-        <td>10</td>
-      </tr>
-      <tr>
-        <td>3</td>
-        <td>6</td>
-        <td>9</td>
-        <td>12</td>
-        <td>15</td>
-      </tr>
-      <tr>
-        <td>4</td>
-        <td>8</td>
-        <td>12</td>
-        <td>16</td>
-        <td>10</td>
-      </tr>
-      <tr>
-        <td>5</td>
-        <td>10</td>
-        <td>15</td>
-        <td>20</td>
-        <td>25</td>
-      </tr>
-    </table>
-    <!-- Таблица -->
-    <!-- Область основного контента -->
-  </div>
+    <?php
+      drawTable($cols, $rows, $color);
+    ?>
+    </div>
   <div id="nav">
     <h2>Навигация по сайту</h2>
-    <!-- Меню -->
     <ul>
-      <li><a href='index.php'>Домой</a>
-      </li>
-      <li><a href='about.php'>О нас</a>
-      </li>
-      <li><a href='contact.php'>Контакты</a>
-      </li>
-      <li><a href='table.php'>Таблица умножения</a>
-      </li>
-      <li><a href='calc.php'>Калькулятор</a>
-      </li>
+      <li><a href='index.php'>Домой</a></li>
+      <li><a href='about.php'>О нас</a></li>
+      <li><a href='contact.php'>Контакты</a></li>
+      <li><a href='table.php'>Таблица умножения</a></li>
+      <li><a href='calc.php'>Калькулятор</a></li>
     </ul>
-    <!-- Меню -->
-  </div>
+    </div>
   <div id="footer">
-    <!-- Нижняя часть страницы -->
-    &copy; Супер Мега Веб-мастер, 2000 &ndash; 2021
-    <!-- Нижняя часть страницы -->
-  </div>
+    &copy; Супер Мега Веб-мастер, 2000 &ndash; <?= $year ?>
+    </div>
 </body>
 
 </html>
